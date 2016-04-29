@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class MainPhotoView extends AppCompatActivity {
 
-    final private int REQUEST_PERMISSION_CODE = 328006;
+    final private int REQUEST_PERMISSION_CODE = 123;
     public static final String POSITION_STRING = "com.whatever.appName.MESSAGE";
     public static final String EXTRA_MESSAGE = "com.whatever.appName.MESSAGE";
 
@@ -86,7 +86,7 @@ public class MainPhotoView extends AppCompatActivity {
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         REQUEST_PERMISSION_CODE);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an

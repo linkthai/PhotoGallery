@@ -48,7 +48,6 @@ public class SinglePhotoView extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         initFile();
-
         initImage();
     }
 
