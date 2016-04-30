@@ -1,9 +1,18 @@
 package com.example.link.photogallery;
 
+import android.Manifest;
+import android.app.WallpaperManager;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,10 +45,14 @@ public class SinglePhotoView extends AppCompatActivity {
 
     ShareActionProvider shareActionProvider;
 
+    final private int REQUEST_PERMISSION_CODE = 123;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_image_view);
+
+        sendRequestPermission();
 
         toolBar = (Toolbar) findViewById(R.id.toolbar_singleImage);
         setSupportActionBar(toolBar);
@@ -107,8 +121,6 @@ public class SinglePhotoView extends AppCompatActivity {
         } catch (NullPointerException ex) {
             Log.d("EXCEPTION", ex.getMessage());
         }
-
-
         return true;
     }
 
@@ -119,14 +131,160 @@ public class SinglePhotoView extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_setBackground) {
-            return true;
+            setBackground();
         } else if (id == R.id.action_edit) {
 
         } else if (id == R.id.action_share) {
 
         } else if (id == R.id.action_delete) {
-
+            deleteImage();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteImage() {
+        DialogInterface.OnClickListener backgroundClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+
+                        imageList.remove(pos);
+                        setResult(RESULT_OK, null);
+
+                        if (imageList.size() > 0)
+                        {
+                            if (pos >= imageList.size())
+                                pos = imageList.size() - 1;
+                        }
+
+                        boolean result = imageFile.delete();
+
+                        if (imageList.size() == 0)
+                        {
+                            finish();
+                            return;
+                        }
+
+                        updateImageInfo();
+
+                        viewPager.setAdapter(new ImagePagerAdapter(SinglePhotoView.this, imageList, pos));
+                        viewPager.setCurrentItem(pos, true);
+
+                        if (!result)
+                        {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SinglePhotoView.this);
+                            builder.setMessage("Error while deleting image!")
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            //do things
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder ab = new AlertDialog.Builder(this);
+        ab.setMessage("Do you want to delete this image?").setPositiveButton("Yes", backgroundClickListener)
+                .setNegativeButton("No", backgroundClickListener).show();
+    }
+
+    private void setBackground() {
+        DialogInterface.OnClickListener backgroundClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+
+                        WallpaperManager myWallpaperManager
+                                = WallpaperManager.getInstance(getApplicationContext());
+
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.toString(), options);
+
+                        try {
+                            myWallpaperManager.setBitmap(bitmap);
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder ab = new AlertDialog.Builder(this);
+        ab.setMessage("Do you want to set this image as background?").setPositiveButton("Yes", backgroundClickListener)
+                .setNegativeButton("No", backgroundClickListener).show();
+    }
+
+    private void sendRequestPermission() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_PERMISSION_CODE);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSION_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 }

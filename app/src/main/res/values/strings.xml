@@ -4,9 +4,10 @@
     <string name="intent_position">IMAGE_POSITION</string>
     <string name="intent_image_list">IMAGE_LIST</string>
 
+    <string name="no_image">There is no image to display :(</string>
+
     <string name="delete">Delete</string>
     <string name="share">Share</string>
     <string name="edit">Edit</string>
     <string name="set_background">Set as background</string>
-    <string name="set_lockscreen">Set as lockscreen</string>
 </resources>

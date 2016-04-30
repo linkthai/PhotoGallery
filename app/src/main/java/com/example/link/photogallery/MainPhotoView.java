@@ -21,12 +21,9 @@ import java.util.ArrayList;
 public class MainPhotoView extends AppCompatActivity {
 
     final private int REQUEST_PERMISSION_CODE = 123;
-    public static final String POSITION_STRING = "com.whatever.appName.MESSAGE";
-    public static final String EXTRA_MESSAGE = "com.whatever.appName.MESSAGE";
 
     Toolbar toolBar;
     GridView gridView;
-    TextView textView;
 
     ArrayList<String> imageList;
 
@@ -50,7 +47,13 @@ public class MainPhotoView extends AppCompatActivity {
 
     private void initImageGridView() {
         imageList = getImageFromStorage(new File(Environment.getExternalStorageDirectory().toString()));
-        toolBar.setTitle(String.valueOf(imageList.size()));
+        //toolBar.setTitle(String.valueOf(imageList.size()));
+
+        TextView tw_noimage = (TextView) findViewById(R.id.tw_noImage);
+        if (imageList.size() > 0)
+            tw_noimage.setVisibility(View.GONE);
+        else
+            tw_noimage.setVisibility(View.VISIBLE);
 
         gridView = (GridView) findViewById(R.id.gridview);
         gridView.setAdapter(new ImageAdapter(this, imageList));
@@ -61,7 +64,7 @@ public class MainPhotoView extends AppCompatActivity {
                 Intent openSingleImage = new Intent(MainPhotoView.this, SinglePhotoView.class);
                 openSingleImage.putExtra(getResources().getString(R.string.intent_position), pos);
                 openSingleImage.putStringArrayListExtra(getResources().getString(R.string.intent_image_list), imageList);
-                context.startActivity(openSingleImage);
+                startActivityForResult(openSingleImage, 1);
             }
 
         });
@@ -141,12 +144,31 @@ public class MainPhotoView extends AppCompatActivity {
             }
             else
             {
-                if (files[i].getName().endsWith(".jpg")) {
+                if (files[i].getName().endsWith(".jpg")
+                        || files[i].getName().endsWith(".png")
+                        || files[i].getName().endsWith(".JPG")
+                        || files[i].getName().endsWith(".PNG")) {
                     newList.add(files[i].toString());
                 }
             }
         }
 
         return newList;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+
+            int index = 0;
+            if (imageList.size() > 0)
+                index = gridView.getFirstVisiblePosition();
+
+            initImageGridView();
+
+            if (imageList.size() > 0)
+                gridView.setSelection(index);
+        }
     }
 }

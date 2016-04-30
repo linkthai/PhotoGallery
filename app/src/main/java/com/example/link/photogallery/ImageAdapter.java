@@ -1,6 +1,9 @@
 package com.example.link.photogallery;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +56,8 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView = (ImageView) convertView.findViewById(R.id.imageGridView);
 
         //imageView.setImageResource((smallImages[pos]));
-        imageView.setImageURI(Uri.parse((String)getItem(pos)));
+        imageView.setImageBitmap(ImageDecoder.decodeSampledBitmapFromPath((String)getItem(pos),
+                100, 100));
         return imageView;
     }
 }
