@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -19,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -135,11 +137,20 @@ public class SinglePhotoView extends AppCompatActivity {
         } else if (id == R.id.action_edit) {
 
         } else if (id == R.id.action_share) {
-
+            shareImage();
         } else if (id == R.id.action_delete) {
             deleteImage();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void shareImage() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+
+        // For a file in shared storage.  For data in private storage, use a ContentProvider.
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageFile));
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
     }
 
     private void deleteImage() {

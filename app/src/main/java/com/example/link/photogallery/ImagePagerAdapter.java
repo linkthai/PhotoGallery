@@ -3,7 +3,9 @@ package com.example.link.photogallery;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
+import android.text.method.Touch;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -43,7 +45,21 @@ public class ImagePagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.pager_item, container, false);
 
-        ImageView imageView = (ImageView) itemView.findViewById(R.id.iw_singleImage);
+        TouchImageView imageView = (TouchImageView) itemView.findViewById(R.id.iw_singleImage);
+
+        imageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                TouchImageView img = (TouchImageView) v;
+                if (img.isZoomed()) {
+                    img.getParent().requestDisallowInterceptTouchEvent(true);
+                } else {
+                    img.getParent().requestDisallowInterceptTouchEvent(false);
+                }
+                return false;
+            }
+        });
+
         imageView.setImageURI(Uri.parse(imageList.get(position)));
 
         container.addView(itemView);
@@ -55,4 +71,6 @@ public class ImagePagerAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((LinearLayout) object);
     }
+
+
 }

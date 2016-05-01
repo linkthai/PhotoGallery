@@ -10,4 +10,6 @@
     <string name="share">Share</string>
     <string name="edit">Edit</string>
     <string name="set_background">Set as background</string>
+
+    <string name="send_to">Share image to:</string>
 </resources>

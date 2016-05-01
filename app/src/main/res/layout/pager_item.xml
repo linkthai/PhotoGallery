@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
+    <com.example.link.photogallery.TouchImageView
     android:id="@+id/iw_singleImage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
