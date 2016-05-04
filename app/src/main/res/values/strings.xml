@@ -1,15 +1,37 @@
 <resources>
     <string name="app_name">PhotoGallery</string>
     <string name="title">Photo Gallery</string>
+
     <string name="intent_position">IMAGE_POSITION</string>
     <string name="intent_image_list">IMAGE_LIST</string>
+    <string name="intent_image_path">IMAGE_PATH</string>
 
     <string name="no_image">There is no image to display :(</string>
 
     <string name="delete">Delete</string>
     <string name="share">Share</string>
     <string name="edit">Edit</string>
+    <string name="save">Save</string>
     <string name="set_background">Set as background</string>
 
     <string name="send_to">Share image to:</string>
+
+    <string name="basic_edit">Basics</string>
+
+    <string name="rotate_left">Rotate left</string>
+    <string name="rotate_right">Rotate right</string>
+    <string name="flip_horizontally">Horizontal flip</string>
+    <string name="flip_vertically">Vertical flip</string>
+
+    <string name="tunes">Tunes</string>
+
+    <string name="effects">Effects</string>
+
+    <string name="effect_none">None</string>
+    <string name="effect_bw">Black &amp; White</string>
+    <string name="effect_sepia">Sepia</string>
+    <string name="effect_invert">Invert colors</string>
+    <string name="effect_polaroid">Polaroid</string>
+
+
 </resources>

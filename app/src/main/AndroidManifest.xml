@@ -17,8 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.link.photogallery.SinglePhotoView" >
-        </activity>
+        <activity android:name="com.example.link.photogallery.SinglePhotoView" />
+        <activity android:name="com.example.link.photogallery.EditImageView" />
     </application>
 
 </manifest>

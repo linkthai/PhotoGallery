@@ -50,12 +50,18 @@ public class ImagePagerAdapter extends PagerAdapter {
         imageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
                 TouchImageView img = (TouchImageView) v;
+                SinglePhotoView photoView = (SinglePhotoView) mContext;
+
                 if (img.isZoomed()) {
                     img.getParent().requestDisallowInterceptTouchEvent(true);
+                    photoView.hideText();
                 } else {
                     img.getParent().requestDisallowInterceptTouchEvent(false);
+                    photoView.showText();
                 }
+
                 return false;
             }
         });

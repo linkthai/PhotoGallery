@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/menu_editImage_top"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/toolbar_opacity"
+        android:elevation="4dp"
+        android:layout_alignParentTop="true"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
+
+    <com.example.link.photogallery.TouchImageView
+        android:id="@+id/iw_editImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/menu_editImage_top"
+        android:layout_above="@+id/menu_editImage_bot"
+        android:background="@color/gray"/>
+
+        <LinearLayout
+            android:id="@+id/menu_editImage_bot"
+            android:layout_width="match_parent"
+            android:divider="?android:dividerHorizontal"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <Button
+                android:onClick="showBasicEdits"
+                android:drawableTop="@drawable/ic_basic"
+                android:text="@string/basic_edit"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:textAllCaps="false"
+                android:textSize="12sp"
+                android:textColor="@color/dark_gray"
+                android:padding="8dp"
+                android:gravity="center"
+                android:background="?android:selectableItemBackgroundBorderless"/>
+            <Button
+                android:onClick="showTunes"
+                android:drawableTop="@drawable/ic_tunes"
+                android:text="@string/tunes"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:textAllCaps="false"
+                android:textSize="12sp"
+                android:textColor="@color/dark_gray"
+                android:padding="8dp"
+                android:gravity="center"
+                android:background="?android:selectableItemBackgroundBorderless"/>
+            <Button
+                android:onClick="showEffects"
+                android:drawableTop="@drawable/ic_effects"
+                android:text="@string/effects"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:textAllCaps="false"
+                android:textSize="12sp"
+                android:textColor="@color/dark_gray"
+                android:padding="8dp"
+                android:gravity="center"
+                android:background="?android:selectableItemBackgroundBorderless"/>
+
+        </LinearLayout>
+
+</RelativeLayout>

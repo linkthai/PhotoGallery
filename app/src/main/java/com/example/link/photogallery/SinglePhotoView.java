@@ -20,7 +20,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -40,12 +42,11 @@ public class SinglePhotoView extends AppCompatActivity {
     TextView textDate;
     Toolbar toolBar;
     ViewPager viewPager;
+    LinearLayout textLayout;
 
     ArrayList<String> imageList;
     File imageFile;
     int pos;
-
-    ShareActionProvider shareActionProvider;
 
     final private int REQUEST_PERMISSION_CODE = 123;
 
@@ -54,14 +55,16 @@ public class SinglePhotoView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_image_view);
 
-        sendRequestPermission();
-
-        toolBar = (Toolbar) findViewById(R.id.toolbar_singleImage);
-        setSupportActionBar(toolBar);
+        textLayout = (LinearLayout) findViewById(R.id.txt_singleImage);
 
         textName = (TextView) findViewById(R.id.tw_imageName);
         textDate = (TextView) findViewById(R.id.tw_imageDate);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        sendRequestPermission();
+
+        toolBar = (Toolbar) findViewById(R.id.toolbar_singleImage);
+        setSupportActionBar(toolBar);
 
         initFile();
         initImage();
@@ -113,6 +116,18 @@ public class SinglePhotoView extends AppCompatActivity {
         textDate.setText(dateFormat.format(lastModDate));
     }
 
+    public void showText() {
+        textLayout.setVisibility(View.VISIBLE);
+        textName.setVisibility(View.VISIBLE);
+        textDate.setVisibility(View.VISIBLE);
+    }
+
+    public void hideText() {
+        textLayout.setVisibility(View.INVISIBLE);
+        textName.setVisibility(View.INVISIBLE);
+        textDate.setVisibility(View.INVISIBLE);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -135,13 +150,19 @@ public class SinglePhotoView extends AppCompatActivity {
         if (id == R.id.action_setBackground) {
             setBackground();
         } else if (id == R.id.action_edit) {
-
+            editImage();
         } else if (id == R.id.action_share) {
             shareImage();
         } else if (id == R.id.action_delete) {
             deleteImage();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void editImage() {
+        Intent editSingleImage = new Intent(SinglePhotoView.this, EditImageView.class);
+        editSingleImage.putExtra(getResources().getString(R.string.intent_image_path), imageFile.getAbsolutePath());
+        startActivityForResult(editSingleImage, 1);
     }
 
     private void shareImage() {
@@ -296,6 +317,19 @@ public class SinglePhotoView extends AppCompatActivity {
 
             // other 'case' lines to check for other
             // permissions this app might request
+        }
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+
+            setResult(RESULT_OK, null);
+
+            initImage();
         }
     }
 }
