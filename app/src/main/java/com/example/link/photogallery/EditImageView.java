@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
@@ -80,14 +81,23 @@ public class EditImageView extends AppCompatActivity {
         Intent intent = getIntent();
         imageFile = new File(intent.getStringExtra(getResources().getString(R.string.intent_image_path)));
 
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(),bmOptions);
-        bitmap_none = bitmap.copy(bitmap.getConfig(), true);
-        bitmap_tuned = bitmap.copy(bitmap.getConfig(), true);
-
         imageView = (TouchImageView) findViewById(R.id.iw_editImage);
 
-        imageView.setImageBitmap(bitmap);
+        ViewTreeObserver vto = imageView.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bitmap = ImageDecoder.decodeSampledBitmapFromPath(imageFile.getPath(), imageView.getWidth(), imageView.getHeight());
+                //bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(),bmOptions);
+                bitmap_none = bitmap.copy(bitmap.getConfig(), true);
+                bitmap_tuned = bitmap.copy(bitmap.getConfig(), true);
+
+                imageView.setImageBitmap(bitmap);
+            }
+
+        });
     }
 
     public void rotateLeft(View view) {

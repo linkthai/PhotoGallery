@@ -15,13 +15,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,6 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import android.support.v4.app.Fragment;
 
 /**
  * Created by Link on 28-Apr-16.
@@ -75,12 +75,13 @@ public class SinglePhotoView extends AppCompatActivity {
 
         imageList = intent.getStringArrayListExtra(getResources().getString(R.string.intent_image_list));
         pos = intent.getIntExtra(getResources().getString(R.string.intent_position), 0);
+        getSupportFragmentManager();
     }
 
     private void initImage() {
         updateImageInfo();
 
-        viewPager.setAdapter(new ImagePagerAdapter(this, imageList, pos));
+        viewPager.setAdapter(new ImagePagerAdapter(getSupportFragmentManager(), this, imageList, pos));
         viewPager.setCurrentItem(pos, true);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -200,7 +201,7 @@ public class SinglePhotoView extends AppCompatActivity {
 
                         updateImageInfo();
 
-                        viewPager.setAdapter(new ImagePagerAdapter(SinglePhotoView.this, imageList, pos));
+                        viewPager.setAdapter(new ImagePagerAdapter(getSupportFragmentManager(), SinglePhotoView.this, imageList, pos));
                         viewPager.setCurrentItem(pos, true);
 
                         if (!result)
