@@ -1,9 +1,11 @@
 package com.example.link.photogallery;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,7 +35,8 @@ public class ImageFragmentView extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.pager_item, container, false);
         imageView = (TouchImageView) root.findViewById(R.id.iw_singleImage);
-        imageView.setImageURI(Uri.parse(imagePath));
+        //imageView.setImageURI(Uri.parse(imagePath));
+        imageView.setImageBitmap(ImageDecoder.decodeSampledBitmapFromPath(imagePath, 500, 500));
 
         imageView.setOnTouchListener(new View.OnTouchListener() {
             @Override

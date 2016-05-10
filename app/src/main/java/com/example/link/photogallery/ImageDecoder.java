@@ -19,6 +19,10 @@ public class ImageDecoder {
         options.inSampleSize = calculateInSampleSize(options, reqWidth,
                 reqHeight);
 
+        options.inJustDecodeBounds = false;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        options.inDither = true;
+
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         Bitmap bmp = BitmapFactory.decodeFile(path, options);
@@ -35,6 +39,10 @@ public class ImageDecoder {
 
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        options.inJustDecodeBounds = false;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        options.inDither = true;
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;

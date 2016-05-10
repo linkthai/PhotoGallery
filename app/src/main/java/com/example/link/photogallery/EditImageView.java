@@ -83,21 +83,11 @@ public class EditImageView extends AppCompatActivity {
 
         imageView = (TouchImageView) findViewById(R.id.iw_editImage);
 
-        ViewTreeObserver vto = imageView.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        bitmap = ImageDecoder.decodeSampledBitmapFromPath(imageFile.getPath(), 500, 500);
+        bitmap_none = bitmap.copy(bitmap.getConfig(), true);
+        bitmap_tuned = bitmap.copy(bitmap.getConfig(), true);
 
-            @Override
-            public void onGlobalLayout() {
-                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                bitmap = ImageDecoder.decodeSampledBitmapFromPath(imageFile.getPath(), imageView.getWidth(), imageView.getHeight());
-                //bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(),bmOptions);
-                bitmap_none = bitmap.copy(bitmap.getConfig(), true);
-                bitmap_tuned = bitmap.copy(bitmap.getConfig(), true);
-
-                imageView.setImageBitmap(bitmap);
-            }
-
-        });
+        imageView.setImageBitmap(bitmap);
     }
 
     public void rotateLeft(View view) {

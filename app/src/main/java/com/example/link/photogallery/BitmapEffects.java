@@ -13,14 +13,16 @@ import android.graphics.Paint;
  */
 public class BitmapEffects {
 
+    final static Matrix matrix = new Matrix();
+
     public static Bitmap rotateLeft(Bitmap bitmap) {
         Bitmap newBitmap;
 
-        Matrix matrix = new Matrix();
+        matrix.reset();
 
         matrix.postRotate(-90);
 
-        newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+        newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
         return newBitmap;
     }
@@ -28,11 +30,11 @@ public class BitmapEffects {
     public static Bitmap rotateRight(Bitmap bitmap) {
         Bitmap newBitmap;
 
-        Matrix matrix = new Matrix();
+        matrix.reset();
 
         matrix.postRotate(90);
 
-        newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+        newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
         return newBitmap;
     }
@@ -40,7 +42,7 @@ public class BitmapEffects {
     public static Bitmap flipHorizontally(Bitmap bitmap) {
         Bitmap newBitmap;
 
-        Matrix matrix = new Matrix();
+        matrix.reset();
         matrix.preScale(-1, 1);
         newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
 
@@ -50,7 +52,7 @@ public class BitmapEffects {
     public static Bitmap flipVertically(Bitmap bitmap) {
         Bitmap newBitmap;
 
-        Matrix matrix = new Matrix();
+        matrix.reset();
         matrix.preScale(1, -1);
         newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
 

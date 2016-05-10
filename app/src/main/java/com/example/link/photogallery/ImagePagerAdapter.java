@@ -49,50 +49,12 @@ public class ImagePagerAdapter extends FragmentStatePagerAdapter {
         return imageList.size();
     }
 
-//    @Override
-//    public boolean isViewFromObject(View view, Object object) {
-//        return view == ((TouchImageView) object);
-//    }
-
     @Override
     public Fragment getItem(int position) {
         ImageFragmentView f = ImageFragmentView.newInstance(mContext);
         f.setImagePath(imageList.get(position));
         return f;
     }
-
-//    @Override
-//    public Object instantiateItem(ViewGroup container, int position) {
-//        View itemView = mLayoutInflater.inflate(R.layout.pager_item, container, false);
-//
-//        TouchImageView imageView = (TouchImageView) itemView.findViewById(R.id.iw_singleImage);
-//
-//        imageView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//
-//                TouchImageView img = (TouchImageView) v;
-//                SinglePhotoView photoView = (SinglePhotoView) mContext;
-//
-//                if (img.isZoomed()) {
-//                    img.getParent().requestDisallowInterceptTouchEvent(true);
-//                    photoView.hideText();
-//                } else {
-//                    img.getParent().requestDisallowInterceptTouchEvent(false);
-//                    photoView.showText();
-//                }
-//
-//                return false;
-//            }
-//        });
-//
-//        imageView.setImageURI(Uri.parse(imageList.get(position)));
-//        //imageView.setImageBitmap(ImageDecoder.decodeSampledBitmapFromPath(imageList.get(position), width, height));
-//
-//        container.addView(itemView);
-//
-//        return itemView;
-//    }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
