@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class ImageAdapter extends BaseAdapter {
 
-
+    private BitmapCache bitmapCache;
     private Context context; // main activity's context
 
     ArrayList<String> list;
@@ -26,6 +26,7 @@ public class ImageAdapter extends BaseAdapter {
     public ImageAdapter(Context context, ArrayList<String> list) {
         this.context = context;
         this.list = list;
+        bitmapCache = new BitmapCache();
     }
 
     @Override
@@ -53,11 +54,20 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int pos, View convertView, ViewGroup parent) {
 
         convertView = LayoutInflater.from(context).inflate(R.layout.imageview_grid_layout, parent, false);
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.imageGridView);
+        ImageView imageView;
+
+        if (convertView == null) { // if it's not recycled, initialize some attributes
+            imageView = new ImageView(context);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setLayoutParams(new GridView.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        } else {
+            imageView = (ImageView) convertView.findViewById(R.id.imageGridView);
+        }
 
         //imageView.setImageResource((smallImages[pos]));
-        imageView.setImageBitmap(ImageDecoder.decodeSampledBitmapFromPath((String)getItem(pos),
-                100, 100));
+        //imageView.setImageBitmap(ImageDecoder.decodeSampledBitmapFromPath((String)getItem(pos), 100, 100));
+        BitmapWorkerTask.loadBitmap(bitmapCache, (String)getItem(pos), imageView, 100);
         return imageView;
     }
 }

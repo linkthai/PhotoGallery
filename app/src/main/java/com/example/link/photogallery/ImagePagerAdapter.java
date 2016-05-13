@@ -25,6 +25,8 @@ public class ImagePagerAdapter extends FragmentStatePagerAdapter {
     Context mContext;
     LayoutInflater mLayoutInflater;
 
+    BitmapCache bitmapCache;
+
     ArrayList<String> imageList;
     int pos;
 
@@ -42,6 +44,8 @@ public class ImagePagerAdapter extends FragmentStatePagerAdapter {
         ((SinglePhotoView)context).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         height = displaymetrics.heightPixels;
         width = displaymetrics.widthPixels;
+
+        bitmapCache = new BitmapCache();
     }
 
     @Override
@@ -51,7 +55,7 @@ public class ImagePagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        ImageFragmentView f = ImageFragmentView.newInstance(mContext);
+        ImageFragmentView f = ImageFragmentView.newInstance(mContext, bitmapCache);
         f.setImagePath(imageList.get(position));
         return f;
     }

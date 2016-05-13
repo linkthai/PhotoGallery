@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 /**
  * Created by Link on 07-May-16.
@@ -18,10 +19,12 @@ public class ImageFragmentView extends Fragment {
     private String imagePath;
     private TouchImageView imageView;
     Context mContext;
+    BitmapCache bitmapCache;
 
-    public static ImageFragmentView newInstance(Context context) {
+    public static ImageFragmentView newInstance(Context context, BitmapCache cache) {
         ImageFragmentView f = new ImageFragmentView();
         f.mContext = context;
+        f.bitmapCache = cache;
         return f;
     }
 
@@ -36,7 +39,9 @@ public class ImageFragmentView extends Fragment {
         View root = inflater.inflate(R.layout.pager_item, container, false);
         imageView = (TouchImageView) root.findViewById(R.id.iw_singleImage);
         //imageView.setImageURI(Uri.parse(imagePath));
-        imageView.setImageBitmap(ImageDecoder.decodeSampledBitmapFromPath(imagePath, 500, 500));
+        //imageView.setImageBitmap(ImageDecoder.decodeSampledBitmapFromPath(imagePath, 500, 500));
+        BitmapWorkerTask.loadBitmap(bitmapCache, imagePath, imageView, 500);
+
 
         imageView.setOnTouchListener(new View.OnTouchListener() {
             @Override

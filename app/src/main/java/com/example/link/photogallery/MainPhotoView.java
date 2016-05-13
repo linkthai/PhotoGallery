@@ -13,6 +13,7 @@ import android.support.v7.widget.*;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -127,8 +128,8 @@ public class MainPhotoView extends AppCompatActivity {
     private void initToolbar()
     {
         toolBar = (Toolbar) findViewById(R.id.toolbar);
+        toolBar.setLogo(R.drawable.ic_logo);
         toolBar.setTitle(R.string.title);
-        toolBar.setLogo(R.mipmap.ic_launcher);
         setSupportActionBar(toolBar);
 
     }
