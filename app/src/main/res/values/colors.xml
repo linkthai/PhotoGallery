@@ -8,4 +8,6 @@
 
     <color name="toolbar_opacity">#00E676</color>
     <color name="toolbar_opacity2">#44000000</color>
+    <color name="ColorPrimary">#FF5722</color>
+    <color name="ColorPrimaryDark">#E64A19</color>
 </resources>
