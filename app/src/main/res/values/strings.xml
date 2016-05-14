@@ -8,6 +8,8 @@
 
     <string name="no_image">There is no image to display :(</string>
 
+    <string name="capture">Camera</string>
+
     <string name="delete">Delete</string>
     <string name="share">Share</string>
     <string name="edit">Edit</string>

@@ -10,17 +10,17 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-<<<<<<< HEAD
 import android.widget.ImageView;
-=======
 import android.widget.ImageButton;
->>>>>>> origin/master
 import android.widget.TextView;
 
 import java.io.File;
@@ -46,6 +46,7 @@ public class MainPhotoView extends AppCompatActivity {
     Context context;
     Bundle myOriginalMemoryBundle;
     ImageButton FAB;
+    SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,24 +60,15 @@ public class MainPhotoView extends AppCompatActivity {
 
         sendRequestPermission();
 
-        initImageGridView();
-        InitFab();
-    }
-
-    private void InitFab(){
-        FAB = (ImageButton) findViewById(R.id.imageButton);
-        FAB.setOnClickListener(new View.OnClickListener(){
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshlayout);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-
-                // start the image capture Intent
-                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+            public void onRefresh() {
+                initImageGridView();
             }
         });
+
+        initImageGridView();
     }
 
     private static Uri getOutputMediaFileUri(int type){
@@ -141,6 +133,7 @@ public class MainPhotoView extends AppCompatActivity {
             }
 
         });
+        refreshLayout.setRefreshing(false);
     }
 
     private void sendRequestPermission() {
@@ -252,5 +245,36 @@ public class MainPhotoView extends AppCompatActivity {
             if (imageList.size() > 0)
                 gridView.setSelection(index);
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main_view, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_capture) {
+            openCamera();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openCamera(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+
+        // start the image capture Intent
+        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 }
