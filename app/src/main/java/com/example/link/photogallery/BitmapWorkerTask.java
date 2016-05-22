@@ -10,7 +10,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by Link on 13-May-16.
  */
-class BitmapWorkerTask extends AsyncTask<Object, Void, Bitmap> {
+public class BitmapWorkerTask extends AsyncTask<Object, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;
     private BitmapCache bitmapCache = null;
     private String imagePath = "";

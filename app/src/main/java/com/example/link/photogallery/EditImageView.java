@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -13,11 +15,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -36,6 +40,8 @@ public class EditImageView extends AppCompatActivity {
     File imageFile;
     TouchImageView imageView;
     Toolbar toolbar;
+    PopupWindow popupWindow;
+
     Bitmap bitmap;
     Bitmap bitmap_none;
     Bitmap bitmap_tuned;
@@ -160,11 +166,14 @@ public class EditImageView extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         ViewGroup container = (ViewGroup) inflater.inflate(R.layout.effects_options, null);
 
-        final PopupWindow popupWindow = new PopupWindow(container);
+        popupWindow = new PopupWindow(container);
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setElevation(6.f);
         popupWindow.setFocusable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
 
         Button btn_effect_none = (Button) container.findViewById(R.id.btn_effect_none);
@@ -224,11 +233,14 @@ public class EditImageView extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         ViewGroup container = (ViewGroup) inflater.inflate(R.layout.tune_options, null);
 
-        final PopupWindow popupWindow = new PopupWindow(container);
+        popupWindow = new PopupWindow(container);
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setElevation(6.f);
         popupWindow.setFocusable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
 
         final TextView tw_brightness = (TextView) container.findViewById(R.id.tw_brightness);
@@ -300,11 +312,14 @@ public class EditImageView extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         ViewGroup container = (ViewGroup) inflater.inflate(R.layout.basic_edit_options, null);
 
-        final PopupWindow popupWindow = new PopupWindow(container);
+        popupWindow = new PopupWindow(container);
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setElevation(6.f);
         popupWindow.setFocusable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
 
         Button btn_rotateLeft = (Button) container.findViewById(R.id.btn_rotateLeft);

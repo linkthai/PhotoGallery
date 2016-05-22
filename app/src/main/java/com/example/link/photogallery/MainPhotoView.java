@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -19,8 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.File;
@@ -31,6 +30,7 @@ import java.util.Date;
 public class MainPhotoView extends AppCompatActivity {
 
     final private int REQUEST_PERMISSION_CODE = 123;
+    final private int CAMERA_REQUEST_PERMISSION_CODE = 110;
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -45,30 +45,42 @@ public class MainPhotoView extends AppCompatActivity {
 
     Context context;
     Bundle myOriginalMemoryBundle;
-    ImageButton FAB;
     SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("sdsadsadsadasdasdasd");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_photo_view);
 
         context = this;
         myOriginalMemoryBundle = savedInstanceState;
 
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshlayout);
+
         initToolbar();
 
-        sendRequestPermission();
+        int version = Build.VERSION.SDK_INT;
+        System.out.println(version);
 
-        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshlayout);
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED)
+        {
+            initImageGridView();
+        }
+        else
+        {
+            sendRequestPermission();
+        }
+
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 initImageGridView();
             }
         });
-
-        initImageGridView();
     }
 
     private static Uri getOutputMediaFileUri(int type){
@@ -146,32 +158,26 @@ public class MainPhotoView extends AppCompatActivity {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         REQUEST_PERMISSION_CODE);
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQUEST_PERMISSION_CODE);
             }
         }
+    }
 
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+    public void sendCameraRequestPermission() {
 
             if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)){
-
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_PERMISSION_CODE);
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_CODE);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_PERMISSION_CODE);
             }
-        }
     }
 
     @Override
@@ -185,13 +191,23 @@ public class MainPhotoView extends AppCompatActivity {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
+                    initImageGridView();
 
                 } else {
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
+                    finish();
                 }
-                return;
+                break;
+            }
+
+            case CAMERA_REQUEST_PERMISSION_CODE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openCameraIntent();
+                }
+                break;
             }
 
             // other 'case' lines to check for other
@@ -269,6 +285,18 @@ public class MainPhotoView extends AppCompatActivity {
     }
 
     private void openCamera(){
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
+        {
+            openCameraIntent();
+        }
+        else
+        {
+            sendCameraRequestPermission();
+        }
+    }
+
+    private void openCameraIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
